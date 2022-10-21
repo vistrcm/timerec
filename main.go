@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -13,16 +14,21 @@ func main() {
 
 	for {
 		start := time.Now()
-		fmt.Print(format(start), " ")
 
-		_, err := reader.ReadString('\n')
+		task, err := reader.ReadString('\n')
 		if err != nil {
 			panic(err)
 		}
 
 		used := duration(time.Since(start))
-		fmt.Println(used)
+		fmt.Printf("\033[1A")
+		ct := cleanTask(task)
+		fmt.Printf("%s %s %s\n", ct, format(start), used)
 	}
+}
+
+func cleanTask(task string) string {
+	return strings.Trim(task, "\n")
 }
 
 func duration(used time.Duration) string {
